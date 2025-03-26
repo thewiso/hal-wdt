@@ -1,0 +1,25 @@
+{
+	"files.associations": {
+		"*.S": "avr",
+		"hal-wdt-atmega-328p.c": "c",
+		"automated-test.h": "c",
+		"delay.h": "c",
+		"hal-wdt.h": "c",
+		"interrupt.h": "c",
+		"portpins.h": "c",
+		"io.h": "c",
+		"iom328p.h": "c",
+		"stddef.h": "c",
+		"manual-test.h": "c",
+		"wdt.h": "c",
+		"hal-test.h": "c",
+		"stdbool.h": "c",
+		"iom3250pa.h": "c",
+		"gpio-atmega328p.h": "c",
+		"gpio-atmega-328p.h": "c",
+		"hal-test-led.h": "c",
+		"hal-wdt-internal-atmega-328p.h": "c",
+		"hal-gpio-atmega-328p.h": "c",
+		"hal-gpio.h": "c"
+	}
+}
