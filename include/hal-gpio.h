@@ -23,6 +23,10 @@ void set_low(int pin);
 
 void toggle(int pin);
 
+short read_digital(int pin);
+
 void set_pin_mode(int pin, pin_mode pin_mode);
+
+pin_mode get_pin_mode(int pin);
 
 void setup_interrupt(int pin, pin_interrupt_sense_mode sense_mode, void (*isr)());

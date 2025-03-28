@@ -43,6 +43,7 @@
 
 #define SET_BIT(register, pin_def) register |= BIT_MASK(pin_def)
 #define CLEAR_BIT(register, pin_def) register &= ~BIT_MASK(pin_def)
+#define READ_BIT(register, pin_def) register & BIT_MASK(pin_def)
 
 // PINB 0x03
 // DDRB 0x04

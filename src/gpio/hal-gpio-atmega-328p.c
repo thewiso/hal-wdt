@@ -1,6 +1,5 @@
 #include "../../include/hal-gpio-atmega-328p.h"
 #include <stddef.h>
-// #include <avr/interrupt.h>
 
 void set_high(int pin)
 {
@@ -16,6 +15,10 @@ void toggle(int pin){
 	SET_BIT(PIN_REGISTER(pin), pin);
 }
 
+short read_digital(int pin){
+	return READ_BIT(PORT_REGISTER(pin), pin);
+}
+
 void set_pin_mode(int pin, pin_mode pin_mode)
 {
 	switch (pin_mode)
@@ -29,6 +32,16 @@ void set_pin_mode(int pin, pin_mode pin_mode)
 	case input_pullup:
 		CLEAR_BIT(DDR_REGISTER(pin), pin);
 		SET_BIT(PORT_REGISTER(pin), pin);
+	}
+}
+
+pin_mode get_pin_mode(int pin){
+	if((READ_BIT(DDR_REGISTER(pin), pin)) == 1){
+		return output;
+	}else if((READ_BIT(PORT_REGISTER(pin), pin)) == 1){
+		return input_pullup;
+	}else{
+		return input;
 	}
 }
 
