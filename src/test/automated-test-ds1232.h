@@ -41,27 +41,27 @@ TEST_RESULT test_setup_valid(const WDTDevice_t* device)
 	const unsigned long timeout = 1200;
 	ASSERT(wdt_setup(device, timeout, true));
 	ASSERT(wdt_is_running(device));
-	// ASSERT(wdt_get_timeout_ms(device) == timeout);
-	// wdt_stop(device);
-	// ASSERT(!wdt_is_running(device));
-	// ASSERT(wdt_get_timeout_ms(device) == timeout);
+	ASSERT(wdt_get_timeout_ms(device) == timeout);
+	wdt_stop(device);
+	ASSERT(!wdt_is_running(device));
+	ASSERT(wdt_get_timeout_ms(device) == timeout);
 
 	return TEST_SUCCESS;
 }
 
 TEST_RESULT test_setup_valid_and_start_later(const WDTDevice_t* device)
 {
-	// const unsigned long timeout = 600;
-	// ASSERT(wdt_setup(device, timeout, false));
-	// ASSERT(!wdt_is_running(device));
-	// ASSERT(wdt_get_timeout_ms(device) == timeout);
-	// wdt_start(device);
-	// ASSERT(wdt_is_running(device));
-	// ASSERT(wdt_get_timeout_ms(device) == timeout);
-	// wdt_stop(device);
-	// ASSERT(!wdt_is_running(device));
-	// ASSERT(wdt_get_timeout_ms(device) == timeout);
-	// return TEST_SUCCESS;
+	const unsigned long timeout = 600;
+	ASSERT(wdt_setup(device, timeout, false));
+	ASSERT(!wdt_is_running(device));
+	ASSERT(wdt_get_timeout_ms(device) == timeout);
+	wdt_start(device);
+	ASSERT(wdt_is_running(device));
+	ASSERT(wdt_get_timeout_ms(device) == timeout);
+	wdt_stop(device);
+	ASSERT(!wdt_is_running(device));
+	ASSERT(wdt_get_timeout_ms(device) == timeout);
+	return TEST_SUCCESS;
 }
 
 // https://stackoverflow.com/questions/252748/how-can-i-use-an-array-of-function-pointers

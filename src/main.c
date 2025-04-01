@@ -17,16 +17,13 @@ int main()
 	test_device->button_pin = PD3;
 
 	WDTDevice_t* wdt_device = wdt_create_device();
-	wdt_device->vcc_pin = PC3;
+	wdt_device->enable_rst_pin = PC3;
 	wdt_device->td_pin = PC4;
 	wdt_device->not_st_pin = PC5;
 
-	// set_pin_mode(PC3, output);
-	// set_high(PC3);
-	// test_delay(test_device, 500);
-	// set_low(PC3);
+	// run_test_1(test_device, wdt_device, 2000);
 
-	run_test_suite(test_device, wdt_device);
-	// run_test_1(test_device, wdt_device);
-	// run_test_2(test_device, wdt_device);
+	// run_test_suite(test_device, wdt_device);
+	run_test_1(test_device, wdt_device, 1200);
+	// run_test_2(test_device, wdt_device, 1200);
 }

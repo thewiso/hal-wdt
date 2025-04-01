@@ -16,7 +16,7 @@ void test_1_user_action()
 	}
 }
 
-void run_test_1(const TestDevice_t* test_device, const WDTDevice_t* wdt_device)
+void run_test_1(const TestDevice_t* test_device, const WDTDevice_t* wdt_device, unsigned int wdt_timeout)
 {
 	test_1_test_device = test_device;
 	test_1_wdt_device = wdt_device;
@@ -25,7 +25,7 @@ void run_test_1(const TestDevice_t* test_device, const WDTDevice_t* wdt_device)
 	test_register_callback_user_action(test_1_test_device, test_1_user_action);
 	test_signal_action(test_1_test_device, start);
 
-	wdt_setup(test_1_wdt_device, 4000, true);
+	wdt_setup(test_1_wdt_device, wdt_timeout, true);
 	while (test_1_should_kick)
 	{
 		test_delay(test_1_test_device, 200);
@@ -53,7 +53,7 @@ void test_2_user_action()
 	}
 }
 
-void run_test_2(const TestDevice_t* test_device, const WDTDevice_t* wdt_device){
+void run_test_2(const TestDevice_t* test_device, const WDTDevice_t* wdt_device, unsigned int wdt_timeout){
 	test_2_test_device = test_device;
 	test_2_wdt_device = wdt_device;
 
@@ -61,7 +61,7 @@ void run_test_2(const TestDevice_t* test_device, const WDTDevice_t* wdt_device){
 	test_register_callback_user_action(test_2_test_device, test_2_user_action);
 	test_signal_action(test_2_test_device, start);
 
-	wdt_setup(test_2_wdt_device, 4000, false);
+	wdt_setup(test_2_wdt_device, wdt_timeout, false);
 	while (true)
 	{
 	}

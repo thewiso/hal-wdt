@@ -20,6 +20,7 @@
 		"hal-test-led.h": "c",
 		"hal-wdt-internal-atmega-328p.h": "c",
 		"hal-gpio-atmega-328p.h": "c",
-		"hal-gpio.h": "c"
+		"hal-gpio.h": "c",
+		"hal-wdt-ds1232.h": "c"
 	}
 }
