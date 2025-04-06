@@ -18,4 +18,4 @@ void wdt_stop(const WDTDevice_t* device);
 
 void wdt_kick(const WDTDevice_t* device);
 
-WDTDevice_t* wdt_create_device();
+WDTDevice_t* wdt_create_device(); //TODO: in header datei von internahl oder ds1232 mit parametern!

@@ -35,6 +35,6 @@ This bit is set if a watchdog system reset occurs. The bit is reset by a power-o
 */
 #define WDRF 3 // Watchdog System Reset Flag
 
-struct WDTDevice
+struct WDTDevice //TODO: in source datei
 {
 };
