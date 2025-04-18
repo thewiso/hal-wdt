@@ -6,7 +6,7 @@
 #include <avr/interrupt.h>
 #include "hal-test-led.h"
 #include "../../include/hal-wdt.h"
-#include "../../include/hal-gpio.h"
+#include "../gpio/hal-gpio.h"
 
 void test_setup(const TestDevice_t *device)
 {
@@ -44,7 +44,7 @@ void signal_success(const TestDevice_t *device)
 void signal_failure(const TestDevice_t *device, int test_case_number)
 {
 	_delay_ms(200);
-	for (unsigned char i = 0; i < test_case_number; i++)
+	for (unsigned short i = 0; i < test_case_number; i++)
 	{
 		set_low(device->red_led_pin);
 		_delay_ms(500);
@@ -75,9 +75,8 @@ void signal_watchdog_stop(const TestDevice_t *device)
 
 void test_signal_action(const TestDevice_t *device, test_action action, ...)
 {
-	// https://en.cppreference.com/w/c/variadic
 	va_list args;
-	va_start(args, action);
+	va_start(args, action); 
 
 	switch (action)
 	{
@@ -88,7 +87,7 @@ void test_signal_action(const TestDevice_t *device, test_action action, ...)
 		signal_success(device);
 		break;
 	case failure:
-		signal_failure(device, va_arg(args, int)); // TODO: size of int
+		signal_failure(device, va_arg(args, int));
 		break;
 	case watchdog_kick:
 		signal_watchdog_kick(device);
@@ -106,8 +105,8 @@ void test_signal_action(const TestDevice_t *device, test_action action, ...)
 	va_end(args);
 }
 
-void test_delay(const TestDevice_t *device, int ms)
-{ // TODO: size of int
+void test_delay(const TestDevice_t *device, uint32_t ms) 
+{
 	_delay_ms((double)ms);
 }
 

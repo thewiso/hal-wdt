@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdbool.h>
+#include <stdint.h>
 
 typedef struct TestDevice TestDevice_t;
 
@@ -20,6 +21,6 @@ void test_register_callback_user_action(const TestDevice_t* device, void (*callb
 
 void test_signal_action(const TestDevice_t* device, test_action action, ...); //variadic function
 
-void test_delay(const TestDevice_t* device, int ms);
+void test_delay(const TestDevice_t* device, uint32_t ms);
 
 TestDevice_t* test_create_device();

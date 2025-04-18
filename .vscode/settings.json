@@ -21,6 +21,7 @@
 		"hal-wdt-internal-atmega-328p.h": "c",
 		"hal-gpio-atmega-328p.h": "c",
 		"hal-gpio.h": "c",
-		"hal-wdt-ds1232.h": "c"
+		"hal-wdt-ds1232.h": "c",
+		"automated-test-ds1232.h": "c"
 	}
 }

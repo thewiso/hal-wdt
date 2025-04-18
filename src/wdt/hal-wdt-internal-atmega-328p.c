@@ -1,61 +1,77 @@
 #include "../../include/hal-wdt-internal-atmega-328p.h"
 #include <stddef.h>
+#include <stdint.h>
 
-bool wdt_is_timeout_valid(const WDTDevice_t* device, unsigned long timeout_ms) //TODO: check if Arduino uses the same clk frequency as in the ATmega doc
-{
-	switch (timeout_ms)
-	{
-	case 16:
-	case 32:
-	case 64:
-	case 125:
-	case 250:
-	case 500:
-	case 1000:
-	case 2000:
-	case 4000:
-	case 8000:
-		return true;
-	}
-	return false;
-}
+#define SFR_OFFSET 0x20
 
-bool wdt_is_running(const WDTDevice_t* device) // this impl differs from the IC, should be noted in assignment!
+/* ----------------------------------
+Watchdog Timer Control Register
+-------------------------------------*/
+#define WDTCSR (*(volatile uint8_t *)(0x60)) // Watchdog Timer Control Register
+
+#define WDT_PRESCALER_MASK 0x27 // 00100111
+
+#define WDT_INTERRUPT_MASK 0xC0 // 11000000
+
+/*
+This bit is used in timed sequences for changing WDE and prescaler bits. To clear the WDE bit, and/or change the prescaler
+bits, WDCE must be set.
+Once written to one, hardware will clear WDCE after four clock cycles.
+*/
+#define WDCE 4 // Watchdog Change Enable
+
+/*
+WDE is overridden by WDRF in MCUSR. This means that WDE is always set when WDRF is set. To clear WDE, WDRF
+must be cleared first. This feature ensures multiple resets during conditions causing failure, and a safe start-up after the
+failure.
+*/
+#define WDE 3 // Watchdog System Reset Enable
+
+/* ----------------------------------
+MCU Status Register
+-------------------------------------*/
+#define MCUSR (*(volatile uint8_t *)(0x35 + SFR_OFFSET)) // MCU Status Register
+
+/*
+This bit is set if a watchdog system reset occurs. The bit is reset by a power-on reset, or by writing a logic zero to the flag.
+*/
+#define WDRF 3 // Watchdog System Reset Flag
+
+bool wdt_is_running(const WDTDevice_t* device) 
 {
 	// WDRF overrides WDE
 	return (MCUSR >> WDRF) & 1 || (WDTCSR >> WDE) & 1;
 }
 
-// TODO check datatype, use uint32_t?
-unsigned long wdt_get_timeout_ms(const WDTDevice_t* device)
+WDTTimeout_t wdt_get_timeout(const WDTDevice_t* device)
 {
 	//the content of WDTSCR is:  WDIF WDIE WDP3 WDCE WDE WDP2 WDP1 WDP0 
 	//we could shift values to our prescale_select looks like 0 0 0 0 WDP3 WDP2 WDP1 WDP0, so the values in our switch statement look more consistent
 	//but as timeouts are an approximation from the documentation and cannot be calculated from the prescale and are therefore arbitrary,
 	//we check the values how they appear in the masked register, simply because this is the fastest way
-	char prescale_select = WDTCSR & WDT_PRESCALER_MASK;
+	uint8_t prescale_select = WDTCSR & WDT_PRESCALER_MASK;
 	switch (prescale_select)
 	{
 	case 0x00:
-		return 16;
+		return ms16;
 	case 0x01:
-		return 32;
+		return ms32;
 	case 0x02:
-		return 64;
+		return ms64;
 	case 0x03:
-		return 125;
+		return ms125;
 	case 0x04:
-		return 250;
+		return ms250;
 	case 0x05:
-		return 500;
+		return ms500;
 	case 0x06:
-		return 1000;
+		return ms1000;
 	case 0x07:
-		return 2000;
+		return ms2000;
 	case 0x20:
-		return 4000;
+		return ms4000;
 	case 0x21:
-		return 8000;
+		return ms8000;
 	default:
 		return -1;
 	}
@@ -80,7 +96,7 @@ void wdt_stop(const WDTDevice_t* device)
 
 	//only clearing the WDCE and WDE bits in WDTCSR after step 1 does not work, we have to write the whole register
 	//so we save the current register without WDCE and WDE in a variable and use this in step 2
-	unsigned char  temp_wdtcsr = WDTCSR & ~((1 << WDCE) | (1 << WDE));
+	uint8_t temp_wdtcsr = WDTCSR & ~((1 << WDCE) | (1 << WDE));
 	MCUSR &= ~(1 << WDRF);
 	WDTCSR |= (1 << WDCE) | (1 << WDE);
 	WDTCSR = temp_wdtcsr;
@@ -88,10 +104,10 @@ void wdt_stop(const WDTDevice_t* device)
 
 void wdt_kick(const WDTDevice_t* device)
 {
-	__asm__("wdr");
+	asm("wdr"); 
 }
 
-bool wdt_setup(const WDTDevice_t* device, unsigned long timeout_ms, bool start)
+void wdt_setup(const WDTDevice_t* device, WDTTimeout_t timeout, bool start)
 {
 	/*
 	The sequence for clearing WDE and changing time-out configuration is as follows:
@@ -101,41 +117,41 @@ bool wdt_setup(const WDTDevice_t* device, unsigned long timeout_ms, bool start)
 		WDCE bit cleared. This must be done in one operation.
 	*/
 	
-	unsigned char new_wdtcsr;
-	switch (timeout_ms)
+	uint8_t new_wdtcsr;
+	switch (timeout)
 	{
-	case 16:
+	case ms16:
 		new_wdtcsr = 0x00;
 		break;
-	case 32:
+	case ms32:
 		new_wdtcsr = 0x01;
 		break;
-	case 64:
+	case ms64:
 		new_wdtcsr = 0x02;
 		break;
-	case 125:
+	case ms125:
 		new_wdtcsr = 0x03;
 		break;
-	case 250:
+	case ms250:
 		new_wdtcsr = 0x04;
 		break;
-	case 500:
+	case ms500:
 		new_wdtcsr = 0x05;
 		break;
-	case 1000:
+	case ms1000:
 		new_wdtcsr = 0x06;
 		break;
-	case 2000:
+	case ms2000:
 		new_wdtcsr = 0x07;
 		break;
-	case 4000:
+	case ms4000:
 		new_wdtcsr = 0x20;
 		break;
-	case 8000:
+	case ms8000:
 		new_wdtcsr = 0x21;
 		break;
 	default:
-		return false;
+		return;
 	}
 	
 	if(start){
@@ -147,7 +163,6 @@ bool wdt_setup(const WDTDevice_t* device, unsigned long timeout_ms, bool start)
 	
 	WDTCSR |= (1 << WDCE) | (1 << WDE);
 	WDTCSR = new_wdtcsr;
-	return true;
 }
 
 WDTDevice_t* wdt_create_device(){

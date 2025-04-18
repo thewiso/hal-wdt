@@ -2,10 +2,8 @@
 #include "../include/hal-wdt-ds1232.h"
 #include "../include/hal-gpio-atmega-328p.h"
 #include "test/hal-test-led.h"
-// #include "test/automated-test-internal-atmega-328p.h"
-#include "test/automated-test-ds1232.h"
-#include "test/manual-test.h"
-#include <stddef.h>
+#include "test/unit-test.h"
+#include "test/integration-test.h"
 
 int main()
 {
@@ -21,9 +19,9 @@ int main()
 	wdt_device->td_pin = PC4;
 	wdt_device->not_st_pin = PC5;
 
-	// run_test_1(test_device, wdt_device, 2000);
+	WDTTimeout_t timeout = ms1200;
 
-	// run_test_suite(test_device, wdt_device);
-	run_test_1(test_device, wdt_device, 1200);
-	// run_test_2(test_device, wdt_device, 1200);
+	// run_test_suite(test_device, wdt_device, timeout);
+	// run_test_1(test_device, wdt_device, timeout);
+	run_test_2(test_device, wdt_device, timeout);
 }
