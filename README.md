@@ -29,4 +29,5 @@ You can find collection for automated integration tests under `src/test`. A HAL 
 You can find some example calls to the tests under [src/main.c](src/main.c)
 
 Here is the testing setup used to test the DS1232:
-!(test-circuit-ds1232.svg)
+
+![the testing setup used to test the DS1232](test-circuit-ds1232.svg)
