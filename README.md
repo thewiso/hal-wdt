@@ -1,6 +1,6 @@
 # HAL-WDT
 
-A hardware abstraction layer (HAL) for watchdog timers (WDT) for AVR micro controllers.
+A hardware abstraction layer (HAL) for watchdog timers (WDT) on AVR micro controllers.
 
 ## Tools
 
