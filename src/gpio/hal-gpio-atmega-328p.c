@@ -117,7 +117,13 @@ void set_interrupt_sense_control(volatile uint8_t *register_ptr, pin_interrupt_s
 	}
 }
 
-// currently only INT0 and INT1 supported!
+/**
+ * @brief ACHTUNG: Momentan nur Interrupts INT0 and INT1 unterstützt!
+ * 
+ * @param pin 
+ * @param sense_mode 
+ * @param isr 
+ */
 void setup_interrupt(uint32_t pin, pin_interrupt_sense_mode sense_mode, void (*isr)())
 {
 	short pin_bit = PIN_BIT(pin);

@@ -7,6 +7,10 @@ bool test_1_should_kick = true;
 const TestDevice_t* test_1_test_device;
 const WDTDevice_t* test_1_wdt_device;
 
+/**
+ * @brief Interne Testfunktion, nicht von außen aufrufen!
+ * 
+ */
 void test_1_user_action()
 {
 	if (test_1_should_kick)
@@ -16,6 +20,13 @@ void test_1_user_action()
 	}
 }
 
+/**
+ * @brief Aktiviert WDT mit Timeout und kickt diesen regelmäßig, bis Nutzer seine Aktion ausführt. Danach sollte der Microcontroller vom WDT zum Reset gezwungen werden.
+ * 
+ * @param test_device 
+ * @param wdt_device 
+ * @param wdt_timeout 
+ */
 void run_test_1(const TestDevice_t* test_device, const WDTDevice_t* wdt_device, WDTTimeout_t wdt_timeout)
 {
 	test_1_test_device = test_device;
@@ -38,7 +49,10 @@ bool test_2_wdt_enabled = false;
 const TestDevice_t* test_2_test_device;
 const WDTDevice_t* test_2_wdt_device;
 
-
+/**
+ * @brief Interne Testfunktion, nicht von außen aufrufen!
+ * 
+ */
 void test_2_user_action()
 {
 	if (test_2_wdt_enabled)
@@ -53,6 +67,13 @@ void test_2_user_action()
 	}
 }
 
+/**
+ * @brief Wenn der Nutzer seine Aktion ausführt, wird der WDT aktiviert. Wenn der Nutzer erneut seine Aktion ausführt, wird der WDT wieder deaktiviert. Bei zu langer Aktivierung sollte der Microcontroller vom WDT zum Reset gezwungen werden.
+ * 
+ * @param test_device 
+ * @param wdt_device 
+ * @param wdt_timeout 
+ */
 void run_test_2(const TestDevice_t* test_device, const WDTDevice_t* wdt_device, WDTTimeout_t wdt_timeout){
 	test_2_test_device = test_device;
 	test_2_wdt_device = wdt_device;

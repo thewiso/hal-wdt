@@ -5,9 +5,9 @@
 
 struct WDTDevice
 {
-	uint32_t enable_rst_pin; //used to provide DS1232 with power
-	uint32_t td_pin; //used for timeout period 
-	uint32_t not_st_pin; //used for kicking wdt
+	uint32_t enable_rst_pin; //Pin, der die Verbindung zwischen den RST Pin von DS1232 und Microcontroller aktiviert
+	uint32_t td_pin; //Pin, der mit TD des DS1232 verbunden ist
+	uint32_t not_st_pin; //Pin der mit not_ST des DS1232 verbunden ist
 };
 
 enum WDTTimeout {
